@@ -1,0 +1,77 @@
+:root {
+  /* Common Brand Tokens */
+  --primary: #6366F1;
+  --primary-light: #818CF8;
+  --accent: #A78BFA;
+  --accent-teal: #14B8A6;
+  --accent-amber: #F59E0B;
+  --accent-red: #EF4444;
+
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --radius-sm: 8px;
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Dark Theme (Default) */
+html[data-theme='dark'],
+:root {
+  --bg: #0B1120;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #172554 0%, #0B1120 80%);
+  --surface: linear-gradient(145deg, rgba(30, 41, 80, 0.6) 0%, rgba(15, 23, 42, 0.6) 100%);
+  --surface-solid: #151D33;
+  --surface-2: rgba(30, 41, 80, 0.5);
+  --surface-hover: rgba(40, 53, 98, 0.7);
+  --surface-subtle: rgba(255, 255, 255, 0.04);
+  --input-bg: rgba(15, 23, 42, 0.65);
+  --pill-bg: rgba(255, 255, 255, 0.08);
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-focus: rgba(99, 102, 241, 0.6);
+
+  --text: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
+  --text-on-primary: #FFFFFF;
+
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --shadow-sm: 0 4px 16px 0 rgba(0, 0, 0, 0.25);
+
+  --mountain-back: #0F172A;
+  --mountain-mid: #090E17;
+  --mountain-fore: #060910;
+
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+
+/* Light Theme */
+html[data-theme='light'] {
+  --bg: #EEF2FF;
+  --bg-gradient: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-solid: #FFFFFF;
+  --surface-2: rgba(241, 245, 249, 0.9);
+  --surface-hover: #FFFFFF;
+  --surface-subtle: rgba(99, 102, 241, 0.04);
+  --input-bg: #FFFFFF;
+  --pill-bg: rgba(99, 102, 241, 0.08);
+
+  --border: rgba(99, 102, 241, 0.15);
+  --border-subtle: rgba(99, 102, 241, 0.08);
+  --border-focus: rgba(99, 102, 241, 0.5);
+
+  --text: #0F172A;
+  --text-muted: #475569;
+  --text-dim: #64748B;
+  --text-on-primary: #FFFFFF;
+
+  --shadow: 0 8px 24px 0 rgba(99, 102, 241, 0.08);
+  --shadow-sm: 0 2px 8px 0 rgba(99, 102, 241, 0.06);
+
+  --mountain-back: #C7D2FE;
+  --mountain-mid: #A5B4FC;
+  --mountain-fore: #818CF8;
+
+  scrollbar-color: rgba(99, 102, 241, 0.25) transparent;
+}

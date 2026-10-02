@@ -1,0 +1,6 @@
+{
+  "name": "SkyCast - Modern Weather & Forecast",
+  "description": "Portfolio-quality weather application with real-time conditions, 7-day and hourly forecasts, air quality indices, interactive weather map, and dynamic visual scenery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
