@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getWeatherCondition } from '../utils/weatherCodes';
-import { useTimeOfDay } from '../utils/timeOfDay';
 
 interface WeatherBackgroundProps {
   weatherCode?: number;
@@ -39,12 +38,10 @@ const SNOW_FLAKES = Array.from({ length: 25 }).map((_, i) => ({
 export const WeatherBackground: React.FC<WeatherBackgroundProps> = React.memo(({
   weatherCode = 0,
   isDay = 1,
-  timeStr,
   isLoading = false,
   theme = 'dark',
 }) => {
   const [isTabVisible, setIsTabVisible] = useState(true);
-  const timeOfDay = useTimeOfDay(timeStr);
 
   useEffect(() => {
     const handleVisibility = () => {
@@ -60,21 +57,7 @@ export const WeatherBackground: React.FC<WeatherBackgroundProps> = React.memo(({
 
   const skyBackgroundStyle = useMemo(() => {
     if (theme === 'light') {
-      if (timeOfDay === 'morning') {
-        if (condition.type === 'clear') {
-          return {
-            background: 'linear-gradient(180deg, #BAE6FD 0%, #E0F2FE 40%, #FEF3C7 85%, #FDE68A 100%)',
-          };
-        }
-        if (condition.type === 'rain' || condition.type === 'thunder') {
-          return {
-            background: 'linear-gradient(180deg, #CBD5E1 0%, #E2E8F0 45%, #FEF3C7 100%)',
-          };
-        }
-        return {
-          background: 'linear-gradient(180deg, #DCEAFE 0%, #E8F0FE 45%, #FEF3C7 100%)',
-        };
-      } else if (timeOfDay === 'day') {
+      if (isDay) {
         if (condition.type === 'clear') {
           return {
             background: 'linear-gradient(180deg, #BAE6FD 0%, #E0F2FE 40%, #EEF2FF 100%)',
@@ -88,36 +71,16 @@ export const WeatherBackground: React.FC<WeatherBackgroundProps> = React.memo(({
         return {
           background: 'linear-gradient(180deg, #DCEAFE 0%, #E8F0FE 45%, #EEF2FF 100%)',
         };
-      } else if (timeOfDay === 'evening') {
-        return {
-          background: 'linear-gradient(180deg, #FDE68A 0%, #FED7AA 35%, #FBCFE8 70%, #DDD6FE 100%)',
-        };
       } else {
-        // Light theme at night: soft lavender dusk with NO dark navy
         return {
           background: 'linear-gradient(180deg, #DDD6FE 0%, #EDE9FE 50%, #EEF2FF 100%)',
         };
       }
     } else {
-      // Dark Theme
-      if (timeOfDay === 'morning') {
+      if (isDay) {
         if (condition.type === 'clear') {
           return {
-            background: 'radial-gradient(circle at 75% 15%, #1e3a8a 0%, #1e293b 40%, #0f172a 75%, #080d1a 100%)',
-          };
-        }
-        if (condition.type === 'rain' || condition.type === 'thunder') {
-          return {
-            background: 'radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 70%, #060910 100%)',
-          };
-        }
-        return {
-          background: 'radial-gradient(circle at 60% 10%, #1e3a8a 0%, #0f172a 65%, #0b1120 100%)',
-        };
-      } else if (timeOfDay === 'day') {
-        if (condition.type === 'clear') {
-          return {
-            background: 'radial-gradient(circle at 75% 15%, #1d4ed8 0%, #1e3a8a 35%, #0f172a 70%, #080d1a 100%)',
+            background: 'radial-gradient(circle at 75% 15%, #1e3a8a 0%, #0f172a 60%, #080d1a 100%)',
           };
         }
         if (condition.type === 'rain' || condition.type === 'thunder') {
@@ -128,12 +91,7 @@ export const WeatherBackground: React.FC<WeatherBackgroundProps> = React.memo(({
         return {
           background: 'radial-gradient(circle at 60% 10%, #1e293b 0%, #0f172a 65%, #0b1120 100%)',
         };
-      } else if (timeOfDay === 'evening') {
-        return {
-          background: 'radial-gradient(circle at 75% 30%, #3b0764 0%, #581c87 30%, #1e1b4b 65%, #0b0f19 100%)',
-        };
       } else {
-        // Dark Night
         if (condition.type === 'clear') {
           return {
             background: 'radial-gradient(circle at 80% 20%, #1e1b4b 0%, #0f172a 60%, #050811 100%)',
@@ -144,15 +102,13 @@ export const WeatherBackground: React.FC<WeatherBackgroundProps> = React.memo(({
         };
       }
     }
-  }, [condition.type, timeOfDay, theme]);
+  }, [condition.type, isDay, theme]);
 
   const shouldAnimate = !isLoading && isTabVisible;
-  // In dark theme, show stars during night period only
-  const showStars = theme === 'dark' && timeOfDay === 'night' && shouldAnimate;
+  const showStars = theme === 'dark' && isDay === 0 && shouldAnimate;
 
   return (
     <div className="dynamic-weather-bg" style={skyBackgroundStyle}>
-      {/* Stars on dark night only (no page-level moon or sun) */}
       {showStars && (
         <div className="bg-stars-container">
           {STARS_DATA.map((star) => (
@@ -172,7 +128,6 @@ export const WeatherBackground: React.FC<WeatherBackgroundProps> = React.memo(({
         </div>
       )}
 
-      {/* Drifting Clouds */}
       {(condition.type === 'cloudy' || condition.type === 'partly-cloudy') && shouldAnimate && (
         <>
           <div
@@ -206,7 +161,6 @@ export const WeatherBackground: React.FC<WeatherBackgroundProps> = React.memo(({
         </>
       )}
 
-      {/* Rain / Drizzle */}
       {(condition.type === 'rain' || condition.type === 'drizzle' || condition.type === 'thunder') &&
         shouldAnimate && (
           <>
@@ -226,10 +180,8 @@ export const WeatherBackground: React.FC<WeatherBackgroundProps> = React.memo(({
           </>
         )}
 
-      {/* Lightning Flash in Dark Theme */}
       {condition.type === 'thunder' && shouldAnimate && <div className="lightning-flash" />}
 
-      {/* Snow */}
       {condition.type === 'snow' && shouldAnimate && (
         <>
           {SNOW_FLAKES.map((flake) => (
@@ -248,7 +200,6 @@ export const WeatherBackground: React.FC<WeatherBackgroundProps> = React.memo(({
         </>
       )}
 
-      {/* Layered Mountain Silhouette at Bottom styled via CSS variables */}
       <svg
         className="mountain-vector-bottom"
         viewBox="0 0 1440 240"

@@ -212,7 +212,6 @@ export default function App() {
       <WeatherBackground
         weatherCode={weatherData?.current?.weather_code}
         isDay={weatherData?.current?.is_day}
-        timeStr={weatherData?.current?.time}
         isLoading={isLoading}
         theme={settings.theme}
       />

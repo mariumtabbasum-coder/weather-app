@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 /**
  * Dynamic Time-of-Day Background Engine for SkyCast
  * Calculates the local time period and provides Tailwind CSS gradients,
@@ -200,3 +202,40 @@ export function getTimeOfDayTheme(
   const period = getTimeOfDayPeriod(hour);
   return TIME_OF_DAY_THEMES[period];
 }
+
+/**
+ * React hook returning the simplified time-of-day category:
+ * 'morning' | 'day' | 'evening' | 'night'
+ * Compatible with components checking for 'day' or 'afternoon'.
+ */
+export function useTimeOfDay(
+  timeInput?: string | Date | number | null,
+  utcOffsetSeconds?: number
+): 'morning' | 'day' | 'evening' | 'night' {
+  return useMemo(() => {
+    const hour = extractLocalHour(timeInput, utcOffsetSeconds);
+    const period = getTimeOfDayPeriod(hour);
+    if (period === 'afternoon') {
+      return 'day';
+    }
+    return period;
+  }, [timeInput, utcOffsetSeconds]);
+}
+
+/**
+ * Helper function returning the simplified time of day period:
+ * 'morning' | 'day' | 'evening' | 'night'
+ */
+export function getTimeOfDay(
+  timeInput?: string | Date | number | null,
+  utcOffsetSeconds?: number
+): 'morning' | 'day' | 'evening' | 'night' {
+  const hour = extractLocalHour(timeInput, utcOffsetSeconds);
+  const period = getTimeOfDayPeriod(hour);
+  if (period === 'afternoon') {
+    return 'day';
+  }
+  return period;
+}
+
+export default useTimeOfDay;
